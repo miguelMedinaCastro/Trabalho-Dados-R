@@ -1,0 +1,156 @@
+dados <- read.csv('lagunaAtualizada.csv', sep = ',', dec = ',', header = TRUE)
+
+head(dados)
+
+plot_na_intersect(dados)
+
+anos <- dados %>% group_by(Ano) %>% summarise(
+  TempMedia=round(mean(TemperaturaMedºC, na.rm=TRUE), 1),
+  PrecMedia=round(mean(PrecipitaçãoTotal, na.rm-TRUE), 1),
+  UmidadeMedia=round(mean(UmidadeRelativadoArMed., na.rm=TRUE), 1)
+)
+
+dados$Data <- as.Date(dados$Data, '%Y-%m-%d')
+
+dados$PrecipitaçãoTotal <- as.numeric(dados$PrecipitaçãoTotal)
+dados$TemperaturaMaxºC <- as.numeric(dados$TemperaturaMaxºC)
+dados$TemperaturaMedºC <- as.numeric(dados$TemperaturaMedºC)
+dados$TemperaturaMin <- as.numeric(dados$TemperaturaMin)
+dados$UmidadeRelativadoArMed. <- as.numeric(dados$UmidadeRelativadoArMed.)
+dados$UmidadeRelativadoArMin. <- as.numeric(dados$UmidadeRelativadoArMin.)
+dados$VentoVelocidadeMed <- as.numeric(dados$VentoVelocidadeMed)
+dados$VentoRajMax <- as.numeric(dados$VentoRajMax)
+dados$VentoVelocidadeMed <- as.numeric(dados$VentoVelocidadeMed)
+
+
+
+anos <- dados %>% group_by(Ano) %>% summarise(TempMedia = round(mean(TemperaturaMedºC, na.rm=TRUE), 1),
+                                              PrecMedia = round(mean(PrecipitaçãoTotal, na.rm=TRUE), 1),
+                                              UmidadeMedia = round(mean(UmidadeRelativadoArMed., na.rm=TRUE), 1))
+
+
+
+#plot(anos$Ano, anos$TempMedia, main='Média da temperatura anual', col.main='red', type = 'b', xlab = 'Ano', ylab = )
+
+
+
+plot(anos$Ano,anos$TempMedia,main="Média da temperatura anual", col.main="red", type="b", xlab="Ano",ylab="Temperatura (°C)",lwd=5,col="red")
+
+
+
+
+
+plot(anos$Ano,anos$PrecMedia,main="Média da preciptação anual", col.main="red", type="b", xlab="Ano",ylab="Preciptação (mm)",lwd=5,col="red")
+
+
+plot(anos$Ano,anos$UmidadeMedia,main="Média da umidade anual", col.main="red", type="b", xlab="Ano",ylab="Umidade ",lwd=5,col="red")
+
+
+
+mes <-dados %>% select(TemperaturaMedºC, Mes) %>% group_by(Mes) %>% summarise("Temperatura Média" = mean(TemperaturaMedºC,na.rm=TRUE))
+
+
+plot(mes,main="Média da temperatura mensal ao longo do período", col.main="red", type="b", xlab="Mês",ylab="Temperatura (°C)",lwd=5,col="red",xaxt = "n")
+axis(1, at = c(1,2,3,4,5,6,7,8,9,10,11,12),labels= c("Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"))
+
+
+
+boxplot(dados$TemperaturaMedºC~dados$Mes,main="Média da temperatura mensal ao longo do período", col.main="red", type="b", xlab="Mês",ylab="Temperatura (°C)",lwd=2,xaxt = "n")
+axis(1, at = c(1,2,3,4,5,6,7,8,9,10,11,12),labels= c("Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"))
+
+boxplot(dados$TemperaturaMedºC~dados$Ano)
+
+
+dados %>% 
+  filter(!is.na(TemperaturaMedºC))%>%
+  ggplot(aes(x=factor(Mes),y=TemperaturaMedºC))+
+  geom_boxplot(width=.2)
+
+
+
+
+dados %>% 
+  filter(!is.na(PrecipitaçãoTotal))%>%
+  ggplot(aes(x=factor(Mes),y=PrecipitaçãoTotal))+
+  geom_boxplot(width=.2)
+
+
+
+dados2015<-dados %>% filter(Ano=="2015")
+dadosresto<-dados%>% filter(Ano!="2015")
+dadosresto %>% 
+  ggplot(aes(y=reorder(-Mes,-Temp), Temp)) + # ggplot(aes(y=reorder(Mes,-Temp), Temp)) +
+  geom_point(aes(color='2016'), size=3, alpha=.2 ) +
+  geom_point(data=dados2015, aes(x=Temp, color='2015'),  alpha=.3) +
+  scale_color_manual(name='Anos',
+                     values=c('2016'='red','2015'='blue'),
+                     labels=c('2016-2021','2015')) +
+  labs(title="Comparação da Temperatura Média em 2015\ncom demais anos de Rio Grande",
+       x="\nTemperatura Média (°C)", y="Meses\n") +
+  theme(plot.title=element_text(hjust=0.5), plot.subtitle=element_text(hjust=0.5),
+        text=element_text(size=16))
+
+
+dados %>% ggplot() + geom_boxplot(aes(x=month.abb[Mes], y=TemperaturaMedºC),
+                                  color="#3b00b3",
+                                  fill="#ccb3ff",
+                                  alpha=0.8,
+                                  notch=TRUE,
+                                  notchwidth = 0.8) + 
+  scale_x_discrete(limits = month.abb) +  hrbrthemes::theme_ipsum_rc() +    
+  labs(
+    x = NULL, y = "Temperaturas médias (Â°C)", fill = NULL,
+    title = "Distribuição das temperaturas médias"  )
+
+dados %>% ggplot(aes(month.abb[Mes],PrecipitaçãoTotal)) +
+  scale_x_discrete(limits = month.abb) +
+  scale_fill_brewer(palette="Set1") +
+  hrbrthemes::theme_ipsum_rc(grid="X") +
+  geom_violin(alpha = 0.5, )  +
+  theme(legend.position = "none") +
+  labs(
+    x = "", y = "Volume de chuvas", fill = NULL,
+    title = "Chuvas por mês",
+    caption = ""
+  )
+
+
+
+dados %>%  plot_normality(PrecipitaçãoTotal, TemperaturaMedºC, VentoRajMax)
+
+
+
+
+
+dados %>% 
+  ggplot(aes(y=TemperaturaMedºC, PrecipitaçãoTotal)) +
+  geom_jitter(size=3, alpha=.1, color='darkblue') +
+  labs(title="Relação entre Temperatura Média e Chuva", subtitle="Dados mensais\n",
+       y="Temperatura Média (°C)\n", x="\nChuva (mm)") +
+  theme(plot.title=element_text(hjust=0.5), plot.subtitle=element_text(hjust=0.5),
+        text=element_text(size=16))
+
+
+
+
+
+
+
+
+correlacao<- dados %>% 
+  filter(TemperaturaMedºC!=is.na(TRUE), PrecipitaçãoTotal!=is.na(TRUE)) %>%
+  summarise(pearson=cor(TemperaturaMedºC, PrecipitaçãoTotal, method='pearson'),
+            spearman=cor(TemperaturaMedºC, PrecipitaçãoTotal, method='spearman'),
+            kendall=cor(TemperaturaMedºC, PrecipitaçãoTotal, method='kendall'))
+
+
+
+
+
+dados %>% 
+  ggplot(aes(y=VentoRajMax, PrecipitaçãoTotal)) +
+  geom_jitter(size=3, alpha=.1, color='darkblue') +
+  labs(title="Relação entre Vento Rajada e Chuva", subtitle="Dados mensais\n",
+       y="Vento Rajada\n", x="\nChuva (mm)") +
+  theme(plot.title=element_text(hjust=0.5), plot.subtitle=element_text(hjust=0.5),
+        text=element_text(size=16))

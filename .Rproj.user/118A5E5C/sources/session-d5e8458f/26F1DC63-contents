@@ -1,0 +1,6 @@
+install.packages("tidyverse")
+
+dados <- read.csv(file = "lagunaAtualizada.csv", header = TRUE,  sep = ";", row.names = NULL,  stringsAsFactors = FALSE)
+
+
+
