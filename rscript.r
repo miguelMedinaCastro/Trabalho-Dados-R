@@ -1,5 +1,3 @@
-#código não 100%, criei mais pra padronizar a criação dos gráficos para as cidades, esse é o esqueleto padrão mas pra acabar o trabalho creio que temos que baixar e modificar algumas partes
-
 library(tidyverse)
 library(dlookr)
 library(tibble)
@@ -7,13 +5,10 @@ library(dplyr)
 library(ggplot2)
 library(data.table)
 
-dados <- read.csv('dadosCampoNovo.csv', sep = ';', dec = ',', header = TRUE)
+dados <- read.csv('nomedacidade.csv', sep = ';', dec = ',', header = TRUE)
 
-
-#renomear as colunas, a principio sao estas, se der erro tinha mais colunas que essas, modificar caso necessário
 colnames(dados) <- c("Data", "PrecipitaçãoTotal", "TemperaturaMax", 'TemperaturaMed', 'TemperaturaMin', 'UmidadeMed', 'VentoRajMax', 'VentoVelocidadeMed')
 
-#deixar as colunas numerics
 dados$PrecipitacaoTotal = as.numeric(dados$PrecipitacaoTotal)
 dados$TemperaturaMax = as.numeric(dados$TemperaturaMax)
 dados$TemperaturaMed = as.numeric(dados$TemperaturaMed)
@@ -35,7 +30,7 @@ diagnose_web_report(dados)
 #resume uma média anual
 anos <- dados %>% group_by(Ano) %>% summarise(
   TempMedia = round(mean(TemperaturaMed, na.rm = TRUE), 1),
-  PrecMedia = round(mean(PrecipitacaoTotal, na.rm = TRUE), 1)
+  PrecMedia = round(mean(PrecipitacaoTotal, na.rm = TRUE), 1),
   UmidadeMedia = round(mean(UmidadeMed, na.rm = TRUE), 1)
 )
 
