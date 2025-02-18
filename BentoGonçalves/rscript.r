@@ -8,7 +8,7 @@ library(ggplot2)
 library(data.table)
 library(hrbrthemes)
 
-dados <- read.csv('dadosCampoNovo.csv', sep = ';', dec = ',', header = FALSE)
+dados <- read.csv('dadosBento.csv', sep = ';', dec = ',', header = FALSE)
 
 
 #renomear as colunas, a principio sao estas, se der erro tinha mais colunas que essas, modificar caso necessário
