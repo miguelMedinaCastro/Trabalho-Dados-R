@@ -1,0 +1,2 @@
+Objetivo do trabalho era puxar dados meteorológicos de cada cidade selecionada em sala de aula e apresentar estes dados ao final do semestre, cada pasta com o nome das cidades
+estão contendo seus respectivos dados juntamente com seu algoritmo, cada cidade tem seu algoritmo de obtenção de dados, tentei deixar o mais padronizado possível, mas para contornar alguns problemas vistos, tive que fazer algumas modificações em cada um.
