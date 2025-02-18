@@ -1,5 +1,3 @@
-#código não 100%, criei mais pra padronizar a criação dos gráficos para as cidades, esse é o esqueleto padrão mas pra acabar o trabalho creio que temos que baixar e modificar algumas partes
-
 library(tidyverse)
 library(dlookr)
 library(tibble)
@@ -54,7 +52,6 @@ dadosLaguna$UmidadeMin = as.numeric(dadosLaguna$UmidadeMin)
 dadosLaguna$VentoRajMax = as.numeric(dadosLaguna$VentoRajMax)
 dadosLaguna$VentoVelocidadeMed = as.numeric(dadosLaguna$VentoVelocidadeMed)
 
-
 #Bento
 dadosBento$PrecipitaçãoTotal = as.numeric(dadosBento$PrecipitaçãoTotal)
 dadosBento$TemperaturaMax = as.numeric(dadosBento$TemperaturaMax)
@@ -64,7 +61,6 @@ dadosBento$UmidadeMed = as.numeric(dadosBento$UmidadeMed)
 dadosBento$UmidadeMin = as.numeric(dadosBento$UmidadeMin)
 dadosBento$VentoRajMax = as.numeric(dadosBento$VentoRajMax)
 dadosBento$VentoVelocidadeMed = as.numeric(dadosBento$VentoVelocidadeMed)
-
 
 #plotar outliers
 dados %>% plot_outlier(PrecipitaçãoTotal)
@@ -102,20 +98,15 @@ mes <-dados %>% select(TemperaturaMed, Mes) %>% group_by(Mes) %>% summarise("Tem
 
 x<-mes$Mes
 
-
   #media da temperatura mensal ao longo do período
 plot(mes,main="Média da temperatura mensal ao longo do período", col.main="red", type="b", xlab="Mês",ylab="Temperatura (°C)",lwd=5,col="red",xaxt = "n")
 axis(1, at = c(1,2,3,4,5,6,7,8,9,10,11,12),labels= c("Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"))
           
-          
 boxplot(dados$TemperaturaMed~dados$Mes,main="Média da temperatura mensal ao longo do período", col.main="red", type="b", xlab="Mês",ylab="Temperatura (°C)",lwd=2,xaxt = "n")
 axis(1, at = c(1,2,3,4,5,6,7,8,9,10,11,12),labels= c("Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"))
-          
 
 #Variação da temperatura por mes ao longo de todos os anos
 boxplot(dados$TemperaturaMed~dados$Ano)
-
-          
 
 dados2013<-dados %>% filter(Ano=="2013")
 dadosresto<-dados%>% filter(Ano!="2013")
@@ -173,19 +164,15 @@ resumo_ano <- dados %>%
     VentoVelocidadeMedMax = max(VentoVelocidadeMed, na.rm = TRUE)
   )
 
-# Certifique-se de que a coluna Ano seja tratada como um número inteiro
 resumo_ano$Ano <- as.integer(resumo_ano$Ano)
 
 # Gráficos para as variáveis
-
 
 dados_limpos <- dados %>%
   filter(
     !is.na(UmidadeMed) & !is.na(UmidadeMin) & !is.na(Ano) & 
       is.finite(UmidadeMed) & is.finite(UmidadeMin)
   )
-
-
 
 # Temperaturas máximas e mínimas
 ggplot(resumo_ano, aes(x = Ano)) +
@@ -239,12 +226,11 @@ ggplot(resumo_ano, aes(x = Ano)) +
   ) +
   theme_minimal()
 
-
 ggplot(resumo_ano, aes(x = Ano)) +
   geom_line(aes(y = UmidadeMax, color = "Umidade Máxima"), size = 1) +
   geom_line(aes(y = UmidadeMin, color = "Umidade Mínima"), size = 1) +
-  scale_x_continuous(breaks = seq(2013, 2024, 1)) + # Configura anos no eixo X
-  scale_y_continuous() + # Garante um eixo Y contínuo
+  scale_x_continuous(breaks = seq(2013, 2024, 1)) + 
+  scale_y_continuous() +
   labs(
     title = "Umidade Máxima e Mínima por Ano",
     x = "Ano",
@@ -259,34 +245,34 @@ tabela_resumo <- data.frame(
   Variável = rep(c("Temperatura Máxima", "Temperatura Média", 
                    "Temperatura Mínima", "Vento Rajada Máxima"), times = 3),
   Média = c(
-    # Campos Novos
+    
     mean(dadosCamposNovos$TemperaturaMax, na.rm = TRUE),
     mean(dadosCamposNovos$TemperaturaMed, na.rm = TRUE),
     mean(dadosCamposNovos$TemperaturaMin, na.rm = TRUE),
     mean(dadosCamposNovos$VentoRajMax, na.rm = TRUE),
-    # Laguna
+    
     mean(dadosLaguna$TemperaturaMax, na.rm = TRUE),
     mean(dadosLaguna$TemperaturaMed, na.rm = TRUE),
     mean(dadosLaguna$TemperaturaMin, na.rm = TRUE),
     mean(dadosLaguna$VentoRajMax, na.rm = TRUE),
-    # Bento Gonçalves
+    
     mean(dadosBento$TemperaturaMax, na.rm = TRUE),
     mean(dadosBento$TemperaturaMed, na.rm = TRUE),
     mean(dadosBento$TemperaturaMin, na.rm = TRUE),
     mean(dadosBento$VentoRajMax, na.rm = TRUE)
   ),
   Mediana = c(
-    # Campos Novos
+    
     median(dadosCamposNovos$TemperaturaMax, na.rm = TRUE),
     median(dadosCamposNovos$TemperaturaMed, na.rm = TRUE),
     median(dadosCamposNovos$TemperaturaMin, na.rm = TRUE),
     median(dadosCamposNovos$VentoRajMax, na.rm = TRUE),
-    # Laguna
+    
     median(dadosLaguna$TemperaturaMax, na.rm = TRUE),
     median(dadosLaguna$TemperaturaMed, na.rm = TRUE),
     median(dadosLaguna$TemperaturaMin, na.rm = TRUE),
     median(dadosLaguna$VentoRajMax, na.rm = TRUE),
-    # Bento Gonçalves
+    
     median(dadosBento$TemperaturaMax, na.rm = TRUE),
     median(dadosBento$TemperaturaMed, na.rm = TRUE),
     median(dadosBento$TemperaturaMin, na.rm = TRUE),
