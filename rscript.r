@@ -1,3 +1,5 @@
+#script geral para obtenção dos dados e juntar as 3 cidades em um gráfico só
+
 library(tidyverse)
 library(dlookr)
 library(tibble)
