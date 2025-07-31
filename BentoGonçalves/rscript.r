@@ -1,5 +1,3 @@
-#código não 100%, criei mais pra padronizar a criação dos gráficos para as cidades, esse é o esqueleto padrão mas pra acabar o trabalho creio que temos que baixar e modificar algumas partes
-
 library(tidyverse)
 library(dlookr)
 library(tibble)
